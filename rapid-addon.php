@@ -323,6 +323,9 @@ if (!class_exists('RapidAddon')) {
 
 			$import_options = $importData['import']['options'][$this->slug];
 
+			// Contains all of the import options, not just add-on specific ones
+			$all_import_options = $importData['import'];
+
 	//		echo "<pre>";
 	//		print_r($import_options);
 	//		echo "</pre>";
@@ -341,43 +344,43 @@ if (!class_exists('RapidAddon')) {
 
 							case 'image':
 
-								// import the specified image, then set the value of the field to the image ID in the media library
+								if ( $this->can_update_meta( $field_params['slug'], $all_import_options ) ) {
+								
+									// import the specified image, then set the value of the field to the image ID in the media library
 
-								$image_url_or_path = $parsedData[$field_slug][$index];
+									$image_url_or_path = $parsedData[$field_slug][$index];
 
-								if ( ! array_key_exists( $field_slug, $import_options['download_image'] ) ) {
-									continue 2;
+									$download = $import_options['download_image'][$field_slug];
+
+									$uploaded_image = PMXI_API::upload_image($post_id, $image_url_or_path, $download, $importData['logger'], true, "", "images", true, $importData['articleData']);
+
+									$data[$field_slug] = array(
+										"attachment_id" => $uploaded_image,
+										"image_url_or_path" => $image_url_or_path,
+										"download" => $download
+									);
+
 								}
-
-								$download = $import_options['download_image'][$field_slug];
-
-								$uploaded_image = PMXI_API::upload_image($post_id, $image_url_or_path, $download, $importData['logger'], true, "", "images", true, $importData['articleData']);
-
-								$data[$field_slug] = array(
-									"attachment_id" => $uploaded_image,
-									"image_url_or_path" => $image_url_or_path,
-									"download" => $download
-								);
 
 								break;
 
 							case 'file':
 
-								$image_url_or_path = $parsedData[$field_slug][$index];
+								if ( $this->can_update_meta( $field_params['slug'], $all_import_options ) ) {
 
-								if ( ! array_key_exists( $field_slug, $import_options['download_image'] ) ) {
-									continue 2;
+									$image_url_or_path = $parsedData[$field_slug][$index];
+
+									$download = $import_options['download_image'][$field_slug];
+
+									$uploaded_file = PMXI_API::upload_image($post_id, $image_url_or_path, $download, $importData['logger'], true, "", "files", true, $importData['articleData']);
+
+									$data[$field_slug] = array(
+										"attachment_id" => $uploaded_file,
+										"image_url_or_path" => $image_url_or_path,
+										"download" => $download
+									);
+
 								}
-
-								$download = $import_options['download_image'][$field_slug];
-
-								$uploaded_file = PMXI_API::upload_image($post_id, $image_url_or_path, $download, $importData['logger'], true, "", "files", true, $importData['articleData']);
-
-								$data[$field_slug] = array(
-									"attachment_id" => $uploaded_file,
-									"image_url_or_path" => $image_url_or_path,
-									"download" => $download
-								);
 
 								break;
 
