@@ -8,9 +8,9 @@
  * @version    1.1.1
  */
 
-namespace Soflyy;
+namespace Soflyy\WpAllImport;
 
-if ( ! class_exists( 'Soflyy/RapidAddon' ) ) {
+if ( ! class_exists( 'Soflyy\WpAllImport\RapidAddon' ) ) {
 	class RapidAddon {
 
 		public $name;
