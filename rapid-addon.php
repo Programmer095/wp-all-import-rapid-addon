@@ -1207,7 +1207,7 @@ if ( ! class_exists( 'Soflyy\WpAllImport\RapidAddon' ) ) {
 
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-			if ( ! class_exists( 'PMXI_Plugin' ) ) {
+			if ( ! class_exists( 'PMXI_Plugin' ) || (isset($conditions['force']) && $conditions['force'])) {
 				$is_show_notice = true;
 			}
 
