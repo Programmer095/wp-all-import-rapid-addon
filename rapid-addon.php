@@ -617,7 +617,11 @@ if ( ! class_exists( 'Soflyy\WpAllImport\RapidAddon' ) ) {
                     <p style="margin: 0 0 12px 0;"><?php echo $field_params['name']; ?></p>
 				<?php
 				endif;
-			}
+			} elseif ( strpos($field_params['type'], 'custom_') !== false ){
+                $output = apply_filters('rapid_render_custom_field_type', '', $field_params);
+
+                echo \wp_kses_post($output);
+            }
 
 
 		}
@@ -1055,11 +1059,11 @@ if ( ! class_exists( 'Soflyy\WpAllImport\RapidAddon' ) ) {
 							if ( $import->options[ $this->slug ]['xpaths'][ $option_name ] == "" ) {
 								$count and $data[ $option_name ] = array_fill( 0, $count, "" );
 							} else {
-								$data[ $option_name ] = XmlImportParser::factory( $xml, $cxpath, (string) $import->options[ $this->slug ]['xpaths'][ $option_name ], $file )->parse();
+								$data[ $option_name ] = \XmlImportParser::factory( $xml, $cxpath, (string) $import->options[ $this->slug ]['xpaths'][ $option_name ], $file )->parse();
 								$tmp_files[]          = $file;
 							}
 						} else {
-							$data[ $option_name ] = XmlImportParser::factory( $xml, $cxpath, (string) $import->options[ $this->slug ][ $option_name ], $file )->parse();
+							$data[ $option_name ] = \XmlImportParser::factory( $xml, $cxpath, (string) $import->options[ $this->slug ][ $option_name ], $file )->parse();
 							$tmp_files[]          = $file;
 						}
 
